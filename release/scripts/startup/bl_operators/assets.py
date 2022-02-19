@@ -3,6 +3,8 @@
 # <pep8 compliant>
 from __future__ import annotations
 
+from numpy import true_divide
+
 import bpy
 from bpy.types import Operator
 
@@ -142,9 +144,30 @@ class ASSET_OT_open_containing_blend_file(Operator):
         cli_args = [bpy.app.binary_path, str(filepath)]
         self._process = subprocess.Popen(cli_args)
 
+class ASSET_OT_regenerate_asset_previews(bpy.types.Operator):
+    """Regenerate multiple selected local asset previews"""
+    bl_idname = "asset.regenerate_asset_previews"
+    bl_label = "Regenerate Asset Previews"
+
+    @classmethod
+    def poll(cls, context):
+        # check for at least one local-file. (TODO: is there a better way?)
+        for asset in context.selected_asset_files:
+            if asset.local_id:
+                return True
+        return False
+
+    def execute(self, context):
+        assets = context.selected_asset_files
+        for asset in assets:
+            if asset.local_id:
+                context.space_data.activate_asset_by_id(asset.local_id)
+                bpy.ops.ed.lib_id_generate_preview()
+        return {'FINISHED'}
 
 classes = (
     ASSET_OT_tag_add,
     ASSET_OT_tag_remove,
     ASSET_OT_open_containing_blend_file,
+    ASSET_OT_regenerate_asset_previews,
 )

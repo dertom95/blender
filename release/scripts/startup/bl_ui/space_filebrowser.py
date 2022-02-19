@@ -744,7 +744,7 @@ class ASSETBROWSER_PT_metadata_preview(asset_utils.AssetMetaDataPanel, Panel):
         col = row.column(align=True)
         col.operator("ed.lib_id_load_custom_preview", icon='FILEBROWSER', text="")
         col.separator()
-        col.operator("ed.lib_id_generate_preview", icon='FILE_REFRESH', text="")
+        col.operator("asset.regenerate_asset_previews", icon='FILE_REFRESH', text="")
         col.menu("ASSETBROWSER_MT_metadata_preview_menu", icon='DOWNARROW_HLT', text="")
 
 
